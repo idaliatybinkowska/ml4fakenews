@@ -1,0 +1,55 @@
+version: "3"
+services:
+  database-ml:
+    build: db
+    ports:
+      - "3306:3306"
+    container_name: db2
+  discovery-service:
+    build: ml4fakenews-discovery-service
+    ports:
+      - "3000:3000"
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+  rabbit:
+    image: rabbitmq:3-management
+    ports: 
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+  emails:
+     build: ml4fakenews-email-service
+     environment:
+      - EUREKA_HOST=discovery-service
+     ports:
+       - "3003:3003"
+     depends_on:
+       - rabbit
+     volumes:
+      - "${HOME}/.m2:/root/.m2"
+  accounts-service:
+    build: ml4fakenews-accounts
+    depends_on:
+      - database-ml
+      - discovery-service
+      - rabbit
+    environment:
+      - DATABASE_HOST=database-ml
+      - EUREKA_HOST=discovery-service
+    ports:
+      - "3001"
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+  gateway-service:
+    build: ml4fakenews-gateway-service
+    depends_on:
+      - discovery-service
+    environment:
+      - EUREKA_HOST=discovery-service
+    ports:
+      - "80:80"
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+
+
