@@ -44,7 +44,7 @@ services:
   subscriptions-service:
     build: ml4fakenews-subscriptions
     ports:
-      - "3002"
+      - "3002:3002"
     environment:
       - DATABASE_HOST=database-ml
       - EUREKA_HOST=discovery-service
