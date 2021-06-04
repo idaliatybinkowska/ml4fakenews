@@ -20,13 +20,12 @@
 
 
 ### On containers
-1. Uncomment lines in files:
-
+1. Run `docker-compose build` in directory with `docker-compose.yml`
 2. Run `docker-compose up` in directory with `docker-compose.yml`
 
 
 ### Links
-- Applicaion works on http://localhost:80
+- Application works on http://localhost:80
     - /accounts
     - /subscriptions
     - /emails
