@@ -54,10 +54,24 @@ services:
       - rabbit
     volumes:
       - "${HOME}/.m2:/root/.m2"
+  verification-service:
+    image: rooniey/ml4fakenews-verification:latest
+    ports:
+      - "5000:5000"
+    entrypoint: ["dockerize","-wait=tcp://discovery-service:3000","-timeout=60s","--","python", "app.py"]
+    environment:
+      - EUREKA_HOST=discovery-service
+      - EUREKA_PORT=3000
+    depends_on:
+      - discovery-service
+  website:
+    image: rooniey/ml4fakenews-website:latest
+    ports:
+      - "80:80"
   gateway-service:
     build: ml4fakenews-gateway-service
     ports:
-      - "80:80"
+      - "8000:80"
     environment:
       - EUREKA_HOST=discovery-service
     depends_on:
