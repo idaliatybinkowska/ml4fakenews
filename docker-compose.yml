@@ -22,7 +22,7 @@ services:
      ports:
        - "3003:3003"
      environment:
-       - EUREKA_HOST=discovery-service
+       - RABBIT_HOST=rabbit
      depends_on:
        - discovery-service
        - rabbit
