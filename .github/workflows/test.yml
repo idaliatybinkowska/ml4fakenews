@@ -17,7 +17,15 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.11
-      - name: Maven Package
+      - name: Build Account microservice
         run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean package -DskipTests
-      - name: Maven Verify
+      - name: Test Account microservice
         run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean verify
+      - name: Build Email microservice
+        run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean package -DskipTests
+      - name: Test Email microservice
+        run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean verify
+      - name: Build Subscriptions microservice
+        run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean package -DskipTests
+      - name: Test Subscriptions microservice
+        run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean verify
