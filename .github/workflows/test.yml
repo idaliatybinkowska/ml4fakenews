@@ -1,31 +1,30 @@
-name: Testing
+# name: Testing
 
-on:
-  push:
-    branches-ignore:
-      - "master"
-      - "release*"
+# on:
+#   push:
+#     branches-ignore:
+#       - "master"
+#       - "release*"
 
-jobs:
-  test:
-    name: Unit Test
-    runs-on: ubuntu-18.04
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.11
-      - name: Build Account microservice
-        run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean package -DskipTests
-      - name: Test Account microservice
-        run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean verify
-      - name: Build Email microservice
-        run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean package -DskipTests
-      - name: Test Email microservice
-        run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean verify
-      - name: Build Subscriptions microservice
-        run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean package -DskipTests
-      - name: Test Subscriptions microservice
-        run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean verify
+# jobs:
+#   test:
+#     name: Unit Test
+#     runs-on: ubuntu-18.04
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: Set up JDK 11
+#         uses: actions/setup-java@v1
+#         with:
+#           java-version: 1.11
+#       - name: Build Account microservice
+#         run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean package -DskipTests
+#       - name: Test Account microservice
+#         run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean verify
+#       - name: Build Email microservice
+#         run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean package -DskipTests
+#       - name: Test Email microservice
+#         run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean verify
+#       - name: Build Subscriptions microservice
+#         run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean package -DskipTests
+#       - name: Test Subscriptions microservice
+#         run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean verify

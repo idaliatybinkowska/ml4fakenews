@@ -1,0 +1,33 @@
+name: Build and Publish images
+
+on:
+  push:
+    branches: [main]
+
+defaults:
+  build-and-push-docker-image:
+    name: Build Docker images and push to repositories
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build image and push to Docker Hub and GitHub Container Registry
+        uses: docker/build-push-action@v2
+        with:
+          context: ./ml4fakenews-accounts
+          tags: rooniey/ml4fakenews-accounts:latest
+
+      - name: Build image and push to Docker Hub and GitHub Container Registry 2
+        uses: docker/build-push-action@v2
+        with:
+          context: ./ml4fakenews-email-service
+          tags: rooniey/ml4fakenews-email-service:latest
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
