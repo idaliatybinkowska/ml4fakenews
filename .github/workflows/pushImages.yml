@@ -28,8 +28,7 @@ jobs:
         with:
           context: ./ml4fakenews-email-service
           push: true
-          tags: |
-            rooniey/ml4fakenews-email-service:latest
+          tags: docker.io/rooniey/ml4fakenews-email-service:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
