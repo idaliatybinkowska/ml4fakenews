@@ -27,14 +27,14 @@ jobs:
         with:
           context: ./ml4fakenews-accounts
           push: true
-          tags: randomstudent/ml4fakenews-accounts:latest
+          tags: randomstudent/ml4fakenews-accounts:${GITHUB_SHA::8}
 
-      - name: Email service - build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: ./ml4fakenews-email-service
-          push: true
-          tags: docker.io/randomstudent/ml4fakenews-email-service:latest
+      # - name: Email service - build and push
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./ml4fakenews-email-service
+      #     push: true
+      #     tags: docker.io/randomstudent/ml4fakenews-email-service:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
