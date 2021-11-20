@@ -1,0 +1,78 @@
+name: Build and publish docker images
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Test"]
+    branches: [master]
+    types:
+      - completed
+      - requested
+
+jobs:
+  build-and-push-docker-image:
+    name: Build Docker images and push to the registry
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Declare variables
+        id: vars
+        run: echo "::set-output name=version::$(echo ${GITHUB_SHA} | cut -c1-8)"
+      
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Account service - build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./ml4fakenews-accounts
+          push: true
+          tags: |
+            randomstudent/ml4fakenews-accounts:latest
+            randomstudent/ml4fakenews-accounts:${{ steps.vars.outputs.version }}
+
+      - name: Discovery service - build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./ml4fakenews-discovery-service
+          push: true
+          tags: |
+            randomstudent/ml4fakenews-discovery-service:latest
+            randomstudent/ml4fakenews-discovery-service:${{ steps.vars.outputs.version }}
+
+      - name: Email service - build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./ml4fakenews-email-service
+          push: true
+          tags: |
+            randomstudent/ml4fakenews-email-service:latest
+            randomstudent/ml4fakenews-email-service:${{ steps.vars.outputs.version }}
+
+      - name: Gateway service - build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./ml4fakenews-gateway-service
+          push: true
+          tags: |
+            randomstudent/ml4fakenews-gateway-service:latest
+            randomstudent/ml4fakenews-gateway-service:${{ steps.vars.outputs.version }}
+      
+      - name: Subscriptions service - build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./ml4fakenews-subscriptions
+          push: true
+          tags: |
+            randomstudent/ml4fakenews-subscriptions:latest
+            randomstudent/ml4fakenews-subscriptions:${{ steps.vars.outputs.version }}
