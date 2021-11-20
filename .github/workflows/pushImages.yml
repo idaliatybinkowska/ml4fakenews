@@ -12,6 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+    
+    
+      
+
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
@@ -27,7 +31,7 @@ jobs:
         with:
           context: ./ml4fakenews-accounts
           push: true
-          tags: randomstudent/ml4fakenews-accounts:${GITHUB_SHA::8}
+          tags: randomstudent/ml4fakenews-accounts:${{ GITHUB_SHA::8 }}
 
       # - name: Email service - build and push
       #   uses: docker/build-push-action@v2
