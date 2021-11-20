@@ -15,10 +15,17 @@ public class Account {
     private int id;
     private String name;
     private String email;
+    private boolean isVerified;
 
     public Account(final int id, final String name, final String email) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.isVerified = false;
     }
+
+    public void verify() {
+        this.isVerified = true;
+    }
+
 }
