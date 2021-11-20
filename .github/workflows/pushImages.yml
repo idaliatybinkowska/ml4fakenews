@@ -37,7 +37,7 @@ jobs:
 
       - name: Discovery service - build and push docker image
         uses: docker/build-push-action@v2
-        with:ml4fakenews-discovery-service
+          context: ./ml4fakenews-discovery-service
           push: true
           tags: |
             randomstudent/ml4fakenews-discovery-service:latest
