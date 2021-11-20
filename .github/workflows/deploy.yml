@@ -1,11 +1,17 @@
 name: Build and publish docker images
 
 on:
-  push:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Test"]
+    branches: [master]
+    types:
+      - completed
+      - requested
 
 jobs:
   build-and-push-docker-image:
-    name: Build Docker images and push to repositories
+    name: Build Docker images and push to the registry
     runs-on: ubuntu-latest
 
     steps:
