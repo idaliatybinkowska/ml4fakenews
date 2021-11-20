@@ -1,4 +1,4 @@
-name: Build and Publish images
+name: Build and publish docker images
 
 on:
   push:
@@ -37,6 +37,7 @@ jobs:
 
       - name: Discovery service - build and push docker image
         uses: docker/build-push-action@v2
+        with:
           context: ./ml4fakenews-discovery-service
           push: true
           tags: |
@@ -61,7 +62,6 @@ jobs:
             randomstudent/ml4fakenews-gateway-service:latest
             randomstudent/ml4fakenews-gateway-service:${{ steps.vars.outputs.version }}
       
-
       - name: Subscriptions service - build and push docker image
         uses: docker/build-push-action@v2
         with:
