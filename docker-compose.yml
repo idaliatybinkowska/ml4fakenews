@@ -35,6 +35,7 @@ services:
     environment:
       - DATABASE_HOST=database-ml
       - EUREKA_HOST=discovery-service
+      - RABBIT_HOST=rabbit
     depends_on:
       - database-ml
       - discovery-service
