@@ -6,4 +6,6 @@ RUN mvn -f /usr/src/app/pom.xml -DskipTests clean package
 FROM openjdk:11
 EXPOSE 3003
 COPY --from=build /usr/src/app/target/*.jar /app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+
+COPY ./bin/start.sh /start.sh
+CMD ["bash", "-c", "/start.sh"]

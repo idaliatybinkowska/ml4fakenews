@@ -23,6 +23,7 @@ services:
        - "3003:3003"
      environment:
        - RABBIT_HOST=rabbit
+       - DD_API_KEY=
      depends_on:
        - discovery-service
        - rabbit
@@ -36,6 +37,7 @@ services:
       - DATABASE_HOST=database-ml
       - EUREKA_HOST=discovery-service
       - RABBIT_HOST=rabbit
+      - DD_API_KEY=
     depends_on:
       - database-ml
       - discovery-service
@@ -49,6 +51,7 @@ services:
     environment:
       - DATABASE_HOST=database-ml
       - EUREKA_HOST=discovery-service
+      - DD_API_KEY=
     depends_on:
       - database-ml
       - discovery-service
