@@ -1,0 +1,84 @@
+version: "3"
+services:
+  database-ml:
+    build: db
+    ports:
+      - "3306:3306"
+  rabbit:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+  discovery-service:
+    image: randomstudent/ml4fakenews-discovery-service:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+  emails:
+     image: randomstudent/ml4fakenews-email-service:latest
+     ports:
+       - "3003:3003"
+     environment:
+       - RABBIT_HOST=rabbit
+       - DD_API_KEY=
+     depends_on:
+       - discovery-service
+       - rabbit
+     volumes:
+      - "${HOME}/.m2:/root/.m2"
+  accounts-service:
+    image: randomstudent/ml4fakenews-accounts:latest
+    ports:
+      - "3001"
+    environment:
+      - DATABASE_HOST=database-ml
+      - EUREKA_HOST=discovery-service
+      - RABBIT_HOST=rabbit
+      - DD_API_KEY=
+    depends_on:
+      - database-ml
+      - discovery-service
+      - rabbit
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+  subscriptions-service:
+    image: randomstudent/ml4fakenews-subscriptions:latest
+    ports:
+      - "3002:3002"
+    environment:
+      - DATABASE_HOST=database-ml
+      - EUREKA_HOST=discovery-service
+      - DD_API_KEY=
+    depends_on:
+      - database-ml
+      - discovery-service
+      - rabbit
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
+  verification-service:
+    image: rooniey/ml4fakenews-verification:latest
+    ports:
+      - "5000:5000"
+    entrypoint: ["dockerize","-wait=tcp://discovery-service:3000","-timeout=60s","--","python", "app.py"]
+    environment:
+      - EUREKA_HOST=discovery-service
+      - EUREKA_PORT=3000
+    depends_on:
+      - discovery-service
+  website:
+    image: rooniey/ml4fakenews-website:latest
+    ports:
+      - "80:80"
+  gateway-service:
+    image: randomstudent/ml4fakenews-gateway-service:latest
+    ports:
+      - "8000:80"
+    environment:
+      - EUREKA_HOST=discovery-service
+    depends_on:
+      - discovery-service
+    volumes:
+      - "${HOME}/.m2:/root/.m2"
