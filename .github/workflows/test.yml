@@ -6,46 +6,45 @@ on:
 
 
 jobs:
-  test:
-    name: Unit Test
-    runs-on: ubuntu-18.04
+  # test:
+  #   name: Unit Test
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - name: Set up JDK 11
+  #       uses: actions/setup-java@v1
+  #       with:
+  #         java-version: 1.11
+  #     - name: Test Account microservice
+  #       run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean verify
+  #     - name: Test Email microservice
+  #       run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean verify
+  #     - name: Test Subscriptions microservice
+  #       run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean verify
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.11
-      - name: Test Account microservice
-        run: mvn -f ./ml4fakenews-accounts/pom.xml -B clean verify
-      - name: Test Email microservice
-        run: mvn -f ./ml4fakenews-email-service/pom.xml -B clean verify
-      - name: Test Subscriptions microservice
-        run: mvn -f ./ml4fakenews-subscriptions/pom.xml -B clean verify
-  jobs:
-    analyze:
-      name: Analyze
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-          with:
-            fetch-depth: 0
-        - name: Set up JDK 11
-          uses: actions/setup-java@v1
-          with:
-            java-version: 11
-        - name: Cache SonarCloud packages
-          uses: actions/cache@v1
-          with:
-            path: ~/.sonar/cache
-            key: ${{ runner.os }}-sonar
-            restore-keys: ${{ runner.os }}-sonar
-        - name: Cache Maven packages
-          uses: actions/cache@v1
-          with:
-            path: ~/.m2
-            key: ${{ runner.os }}-m2-${{ hashFiles('./ml4fakenews-accounts/pom.xml') }}
-            restore-keys: ${{ runner.os }}-m2
-        - name: Build and analyze
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          run: mvn -f ./ml4fakenews-accounts/pom.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=com.ml4fakenews:accounts
+          java-version: 11
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('./ml4fakenews-accounts/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -f ./ml4fakenews-accounts/pom.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=com.ml4fakenews:accounts
