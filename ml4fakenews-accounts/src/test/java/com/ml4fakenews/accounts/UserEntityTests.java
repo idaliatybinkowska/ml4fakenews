@@ -1,16 +1,16 @@
 package com.ml4fakenews.accounts;
 
 
-import com.ml4fakenews.accounts.entities.Account;
+import com.ml4fakenews.accounts.entities.User;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AccountEntityTests {
+class UserEntityTests {
 
     @Test
     void verifyingAccount() {
-        Account acc = new Account("RandomUser", "some@email.com");
+        User acc = new User("RandomUser","asdjhł$$3A", "some@email.com");
         acc.verify();
         assertThat(acc.isVerified()).isTrue();
     }
