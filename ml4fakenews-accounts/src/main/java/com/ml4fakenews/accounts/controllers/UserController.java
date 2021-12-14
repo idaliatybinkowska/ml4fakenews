@@ -3,6 +3,7 @@ package com.ml4fakenews.accounts.controllers;
 import com.ml4fakenews.accounts.dtos.LoginData;
 import com.ml4fakenews.accounts.dtos.RegistrationData;
 import com.ml4fakenews.accounts.entities.User;
+import com.ml4fakenews.accounts.services.CaptchaService;
 import com.ml4fakenews.accounts.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/accounts")
 public class UserController {
     private UserService userService;
+    CaptchaService captchaService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -44,6 +46,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginData data) {
+        boolean isValidCaptcha = captchaService.validateCaptcha(data.getCaptchaToken());
+        if(!isValidCaptcha){
+            return new ResponseEntity("Błędna captcha", HttpStatus.BAD_REQUEST);
+        }
         return userService.authenticateUser(data.getUsername(), data.getPassword());
     }
 
