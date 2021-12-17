@@ -33,7 +33,7 @@ public class UserController {
         return userService.getAccountById(id);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     ResponseEntity<?> registerAccount(@RequestBody RegistrationData registrationData) {
         if(!userService.isPasswordCorrect(registrationData)) {
             return new ResponseEntity("Hasło jest zbyt słabe. Musi mieć długość od 8 do 20 znaków, małe i duże litery, znak specjalny oraz cyfrę", HttpStatus.BAD_REQUEST);

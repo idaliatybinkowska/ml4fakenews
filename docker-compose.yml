@@ -75,7 +75,7 @@ services:
   gateway-service:
     build: ml4fakenews-gateway-service
     ports:
-      - "8000:80"
+      - "3004:3004"
     environment:
       - EUREKA_HOST=discovery-service
     depends_on:
