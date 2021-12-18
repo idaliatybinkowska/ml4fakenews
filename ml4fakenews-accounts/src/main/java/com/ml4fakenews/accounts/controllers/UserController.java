@@ -33,6 +33,12 @@ public class UserController {
         return userService.getAccountById(id);
     }
 
+
+    @GetMapping("/username/{username}")
+    public User getUserByUsername(@PathVariable String username) {
+        return userService.loadUserByUsername(username);
+    }
+
     @PostMapping("/register")
     ResponseEntity<?> registerAccount(@RequestBody RegistrationData registrationData) {
         if(!userService.isPasswordCorrect(registrationData)) {
@@ -46,10 +52,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginData data) {
-        boolean isValidCaptcha = captchaService.validateCaptcha(data.getCaptchaToken());
-        if(!isValidCaptcha){
-            return new ResponseEntity("Błędna captcha", HttpStatus.BAD_REQUEST);
-        }
+        //boolean isValidCaptcha = captchaService.validateCaptcha(data.getCaptchaToken());
+        //if(!isValidCaptcha){
+          //  return new ResponseEntity("Błędna captcha", HttpStatus.BAD_REQUEST);
+        //}
         return userService.authenticateUser(data.getUsername(), data.getPassword());
     }
 
