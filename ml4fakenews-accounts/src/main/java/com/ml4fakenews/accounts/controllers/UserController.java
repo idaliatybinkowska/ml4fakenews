@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/accounts")
 public class UserController {
     private UserService userService;
     CaptchaService captchaService;

@@ -81,6 +81,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             throws Exception {
 //        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/accounts/system/**").denyAll()
 //                .anyRequest().authenticated().and().addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/accounts/accounts/register").permitAll().antMatchers("/accounts/accounts/login").permitAll().anyRequest().authenticated().and().addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/accounts/register").permitAll().antMatchers("/accounts/login").permitAll().anyRequest().authenticated().and().addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
