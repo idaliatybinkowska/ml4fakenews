@@ -44,7 +44,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 RestTemplate restTemplate = new RestTemplate();
 
                 ResponseEntity<String> response
-                        = restTemplate.getForEntity("http://accounts-service:3001/accounts/username/"+username, String.class);
+                        = restTemplate.getForEntity("http://accounts-service:3001/username/"+username, String.class);
                 ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
                 JSONObject json = new JSONObject(response.getBody());
