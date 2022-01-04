@@ -15,11 +15,12 @@ import java.util.List;
 @RestController
 public class UserController {
     private UserService userService;
-    CaptchaService captchaService;
+    private CaptchaService captchaService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CaptchaService captchaService) {
         this.userService = userService;
+        this.captchaService = captchaService;
     }
 
     @GetMapping
@@ -51,10 +52,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginData data) {
-        //boolean isValidCaptcha = captchaService.validateCaptcha(data.getCaptchaToken());
-        //if(!isValidCaptcha){
-          //  return new ResponseEntity("Błędna captcha", HttpStatus.BAD_REQUEST);
-        //}
+        boolean isValidCaptcha = captchaService.validateCaptcha(data.getCaptchaToken());
+        if(!isValidCaptcha) {
+            return new ResponseEntity("Błędna captcha", HttpStatus.BAD_REQUEST);
+        }
         return userService.authenticateUser(data.getUsername(), data.getPassword());
     }
 

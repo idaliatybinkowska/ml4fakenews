@@ -1,4 +1,5 @@
-package com.ml4fakenews.accounts.security;
+package com.ml4fakenews.gatewayservice.security;
+
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,4 +13,5 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
+    //
 }
