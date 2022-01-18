@@ -2,6 +2,7 @@ package com.ml4fakenews.accounts.controllers;
 
 import com.ml4fakenews.accounts.dtos.LoginData;
 import com.ml4fakenews.accounts.dtos.RegistrationData;
+import com.ml4fakenews.accounts.dtos.UserData;
 import com.ml4fakenews.accounts.entities.User;
 import com.ml4fakenews.accounts.services.CaptchaService;
 import com.ml4fakenews.accounts.services.UserService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,19 +26,30 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllAccounts() {
-        return userService.getAllAccounts();
+    public List<UserData> getAllAccounts() {
+        ArrayList<UserData> data = new ArrayList<>();
+        userService.getAllAccounts().forEach(account ->  {
+            data.add(userToUserData(account));
+
+        });
+        return data;
     }
 
     @GetMapping("/{id}")
-    public User getAccountById(@PathVariable int id) {
-        return userService.getAccountById(id);
+    public UserData getAccountById(@PathVariable int id) {
+        return userToUserData(userService.getAccountById(id));
     }
 
 
     @GetMapping("/username/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        return userService.loadUserByUsername(username);
+    public UserData getUserByUsername(@PathVariable String username) {
+        return userToUserData(userService.loadUserByUsername(username));
+    }
+
+    private UserData userToUserData(User user) {
+        ArrayList<String> authorities = new ArrayList<>();
+        user.getRoles().forEach(role -> authorities.add(role.getRolename()));
+        return new UserData(user.getId(), user.getUsername(),user.getEmail(),authorities);
     }
 
     @PostMapping("/register")

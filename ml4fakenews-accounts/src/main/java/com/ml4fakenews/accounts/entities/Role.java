@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
-@Data
+
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
@@ -18,4 +18,33 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
+
+    public Role(Integer id, String rolename) {
+        this.id = id;
+        this.rolename = rolename;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getRolename() {
+        return rolename;
+    }
+
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
 }

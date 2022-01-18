@@ -34,11 +34,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("NO JESTETM w dofilterinternal");
+
         try{
-            System.out.println("przed jwt");
+
             String jwt = parseJwt(httpServletRequest);
-            System.out.println("po jwt");
+
            if(jwt != null && jwtTokenUtil.validateJwtToken(jwt)){
                 String username  = jwtTokenUtil.getUsernameByToken(jwt);
                 RestTemplate restTemplate = new RestTemplate();
@@ -49,14 +49,28 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                 JSONObject json = new JSONObject(response.getBody());
                 JSONArray array = json.getJSONArray("authorities");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject role  = array.getJSONObject(i);
-                    authorities.add(new SimpleGrantedAuthority(role.getString("authority")));
-                }
+                boolean isProd = false;
+               boolean isBusinessClient = false;
+
+               for (int i = 0; i < array.length(); i++) {
+                   String role  = array.getString(i);
+                   if(role.equals("ROLE_BUSINESS")) {
+                       isBusinessClient = true;
+                   }
+                   authorities.add(new SimpleGrantedAuthority(role));
+               }
+
+               if(!isBusinessClient && isProd) {
+                   if(httpServletRequest.getHeader("referer") == null || httpServletRequest.getHeader("referer").contains("ml4fakenews-website")) {
+                       System.out.println("Ten pan nie moze z tego punktu pytac");
+                       throw new Exception("Brak uprawnień do korzystania z API");
+                   }
+
+               }
                 //UserDetails UserDetails = new RestTemplate().getForObject(, UserDetails.class);
                 //String username = "sada";
                // String authorities = null;
-                System.out.println("no wrocil request");
+
                 //UserDetails UserDetails = userService.loadUserByUsername(jwtTokenUtil.getUsernameByToken(jwt));
                 UsernamePasswordAuthenticationToken passwordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         username, null, authorities
