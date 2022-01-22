@@ -80,7 +80,7 @@ public class UserService implements UserDetailsService {
 
     public boolean isPasswordCorrect(RegistrationData data) {
         String password = data.getPassword();
-        Pattern regex = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$");
+        Pattern regex = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[#?!@$%^&*-]).{8,20}$");
         return regex.matcher(password).matches();
     }
 
